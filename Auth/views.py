@@ -35,7 +35,7 @@ class Login(APIView):
             
             return Response({
                 'token': token.key,
-                'user': CustomUserSerializer(user).data
+                'user': CustomUserSerializer(user,context={'request': request}).data
             })
         else:
             return Response(
