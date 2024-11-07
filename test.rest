@@ -1,0 +1,16 @@
+POST http://localhost:8000/api/auth/register
+Content-Type: application/json
+
+{"username":"Ngoga1","password":"Ngoga","email":"ngogainncent@gmail.com","phone_number":"0782214360","first_name":"Ngoga","last_name":"Innocent"}
+#####
+POST http://localhost:8000/api/auth/
+Content-Type: application/json
+
+{"username":"Ngoga1","password":"Ngoga"}
+
+#####
+PUT http://localhost:8000/api/auth/update_profile
+Content-Type: application/json
+Authorization: Token a2c866de186669dc12ce8545438f08c70b6d02c5
+
+{"username":"Ngoga1","password":"Ngoga"}
