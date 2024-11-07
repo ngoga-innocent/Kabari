@@ -3,10 +3,11 @@ Content-Type: application/json
 
 {"username":"Ngoga1","password":"Ngoga","email":"ngogainncent@gmail.com","phone_number":"0782214360","first_name":"Ngoga","last_name":"Innocent"}
 #####
+
 POST http://localhost:8000/api/auth/
 Content-Type: application/json
 
-{"username":"Ngoga1","password":"Ngoga"}
+{"username":"0782214360","password":"Ngoga"}
 
 #####
 PUT http://localhost:8000/api/auth/update_profile

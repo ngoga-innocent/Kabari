@@ -8,27 +8,29 @@ from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 class RegisterUser(APIView):
     def post(self, request):
-        serializer = CustomUserSerializer(data=request.data,files=request.FILES)
+        serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             return Response({"message": "User created successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 class Login(APIView):
     def post(self, request, *args, **kwargs):
-        username = request.data.get('username')
+        identifier = request.data.get('username')  # Can be username or phone number
         password = request.data.get('password')
         
-        if not username or not password:
+        if not identifier or not password:
             return Response(
-                {'error': 'Username and password are required.'},
+                {'error': 'username or  phone number and password are required.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        user = authenticate(username=username, password=password)
-        
-        if user:
-            # Enforce single-session token by deleting any existing token for the user
-            Token.objects.filter(user=user).delete()
+        # Try to get the user by username or phone number
+        user = Users.objects.filter(username=identifier).first() or \
+               Users.objects.filter(phone_number=identifier).first()
+
+        # Authenticate user if found
+        if user and user.check_password(password):
+            Token.objects.filter(user=user).delete()  # Ensure a single active session
             token, _ = Token.objects.get_or_create(user=user)
             
             return Response({
@@ -40,6 +42,7 @@ class Login(APIView):
                 {'error': 'Invalid credentials'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
 class UpdateProfileView(APIView):
     permission_classes = [IsAuthenticated]
 
